@@ -1,8 +1,12 @@
 <h1># revrbe-better-memory</h1>
 
-Functional memory header for opening handle, getting modules and read/writing to process. Currently it is using NtOpenProcess to open a handle to csgo.exe and XOR encryption on memory read/write operations with randomized XOR key. 
+Functional memory header for opening handle, getting modules and read/writing to process. 
+
+Currently it is using NtOpenProcess to open a handle to csgo.exe and XOR encryption on memory read/write operations with randomized XOR key. 
 
 <h2>Features and to-do</h2>
+
+✅ Clean modern C++ code
 
 ✅ Memory operations (read/write) XOR-encrypted with random key
 
