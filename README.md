@@ -26,6 +26,6 @@ Only tested on Windows 10 21H2
 
 <h3>Personal Note</h3>
 
-Was too bored to implement any actual cheat features, but tested with simple bunny-hop and it works fine.
+Was too bored to implement any actual cheat features, but tested with simple bunny-hop and it works fine. For extra security; I recommend using Themida, VMProtect or Enigma.
 
 Contact: REVRBE#7036
