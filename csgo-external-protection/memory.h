@@ -32,13 +32,13 @@ private:
     std::string XOR_key; 
 public:
     MemInterface() {
-        XOR_key = GenerateKey(24); // For a 16-character key
+        XOR_key = GenerateKey(24); 
     }
 
     std::string GenerateKey(int length) {
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(33, 126); // printable ASCII
+        std::uniform_int_distribution<> dis(33, 126); 
 
         std::string key;
         for (int n = 0; n < length; ++n)
