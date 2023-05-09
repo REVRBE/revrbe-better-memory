@@ -6,11 +6,11 @@ Functional memory header for opening handle, getting modules and read/writing to
 
 ✅ Memory operations (read/write) XOR-encrypted with random key
 
-✅ Direct system call to NtOpenProcess instead of using Windows API's OpenProcess(ReadProcessMemory, WriteProcessMemory, CreateToolhelp32Snapshot, Process32Next, Module32Next, ProcessIdToSessionId, GetModuleHandle & GetProcAddress)
+✅ Direct system call to NtOpenProcess instead of using Windows API's OpenProcess
 
 ✅ Polymorphism
 
-❌ Changing the rest of the Windows API functions to Native API functions(
+❌ Changing the rest of the Windows API functions to Native API functions(ReadProcessMemory, WriteProcessMemory, CreateToolhelp32Snapshot, Process32Next, Module32Next, ProcessIdToSessionId, GetModuleHandle & GetProcAddress)
 
 <h2>Usage</h2>
 
