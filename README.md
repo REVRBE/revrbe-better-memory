@@ -16,6 +16,8 @@ Currently it is using NtOpenProcess to open a handle to csgo.exe and XOR encrypt
 
 ❌ Changing the rest of the Windows API functions to Native API functions(ReadProcessMemory, WriteProcessMemory, CreateToolhelp32Snapshot, Process32Next, Module32Next, ProcessIdToSessionId, GetModuleHandle & GetProcAddress)
 
+❌ It generates new XOR key per memory operation, need to fix so it has one key per program run.
+
 <h2>Usage</h2>
 
 Implement your own cheat features and boom, it's a functional cheat.
