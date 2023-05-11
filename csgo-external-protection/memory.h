@@ -28,11 +28,11 @@ public:
 
 class MemInterface
 {
-private:
-    std::string XOR_key; 
 public:
     MemInterface() {
-        XOR_key = GenerateKey(24); 
+        if (XOR_key.empty()) { 
+            XOR_key = GenerateKey(16);
+        }
     }
 
     std::string GenerateKey(int length) {
@@ -76,8 +76,12 @@ public:
     }
 
 protected:
+    static std::string XOR_key;
+
     virtual void* GetProcessHandle() const noexcept = 0;
 };
+
+std::string MemInterface::XOR_key = ""; // Dont change this
 
 class Memory : public MemInterface
 {
