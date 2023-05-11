@@ -3,6 +3,19 @@
 #include "memory.h"
 #include "offsets.h"
 
+void bunnyhop(Memory& mem, std::uintptr_t clientDLL, std::uintptr_t localPlayer) {
+    int flags = mem.Read<int>(localPlayer + hazedumper::netvars::m_fFlags);
+
+    if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
+        if (flags & (1 << 0)) {
+            mem.Write<int>(clientDLL + hazedumper::signatures::dwForceJump, 6);
+        }
+        else {
+            mem.Write<int>(clientDLL + hazedumper::signatures::dwForceJump, 4);
+        }
+    }
+}
+
 int main()
 {
     Memory mem("csgo.exe");
@@ -28,9 +41,11 @@ int main()
 
 
     while (true) {
-        // Implement your shit here
+        std::uintptr_t localPlayer = mem.Read<std::uintptr_t>(clientDLL + hazedumper::signatures::dwLocalPlayer);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        bunnyhop(mem, clientDLL, localPlayer);
+
+        Sleep(25);
     }
 
     return 0;
