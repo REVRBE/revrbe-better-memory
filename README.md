@@ -6,6 +6,8 @@ Currently it is using NtOpenProcess to open a handle to csgo.exe and XOR encrypt
 
 <h2>Features and to-do</h2>
 
+✅ Bunnyhop
+
 ✅ Clean modern C++ code
 
 ✅ Memory operations (read/write) XOR-encrypted with random key
@@ -18,7 +20,7 @@ Currently it is using NtOpenProcess to open a handle to csgo.exe and XOR encrypt
 
 <h2>Usage</h2>
 
-Implement your own cheat features and boom, it's a functional cheat.
+Currently only bhop, but compile and run the executable. (From observation, I've noticed that sometimes it doesn't do anything, just re-open and try again)
 
 Only tested on Windows 10 21H2
 
