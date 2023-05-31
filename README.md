@@ -31,3 +31,6 @@ Only tested on Windows 10 21H2
 Was too bored to implement any actual cheat features, but tested with simple bunny-hop and it works fine. For extra security; I recommend using Themida, VMProtect or Enigma.
 
 Contact: REVRBE#7036
+
+<h4>Update</h4>
+Currently busy with other projects, so this is not being worked on atm or in the nearest future.
