@@ -33,4 +33,4 @@ Was too bored to implement any actual cheat features, but tested with simple bun
 Contact: REVRBE#7036
 
 <h4>Update</h4>
-I fixed the code, so it works better than before. Also I removed the XOR encryption on the memory operations, but will probably re-add it again soon.
+I fixed the code, so it works better than before. Also I removed the XOR encryption on the memory operations, but will probably re-add it again soon with a more reliable implementation.
