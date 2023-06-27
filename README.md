@@ -2,7 +2,7 @@
 
 Functional memory header for opening handle, getting modules and read/writing to process. 
 
-Currently it is using NtOpenProcess to open a handle to csgo.exe and XOR encryption on memory read/write operations with randomized XOR key. 
+Currently it is using NtOpenProcess to open a handle to the process/game.
 
 <h2>Features and to-do</h2>
 
@@ -10,7 +10,7 @@ Currently it is using NtOpenProcess to open a handle to csgo.exe and XOR encrypt
 
 ✅ Clean modern C++ code
 
-✅ Memory operations (read/write) XOR-encrypted with random key
+✅ Memory operations (read/write) 
 
 ✅ Direct system call to NtOpenProcess instead of using Windows API's OpenProcess
 
@@ -20,7 +20,7 @@ Currently it is using NtOpenProcess to open a handle to csgo.exe and XOR encrypt
 
 <h2>Usage</h2>
 
-Currently only bhop, but compile and run the executable. (From observation, I've noticed that sometimes it doesn't do anything, just re-open and try again)
+Currently only bhop, but compile and run the executable. 
 
 Only tested on Windows 10 21H2
 
@@ -33,4 +33,4 @@ Was too bored to implement any actual cheat features, but tested with simple bun
 Contact: REVRBE#7036
 
 <h4>Update</h4>
-Currently busy with other projects, so this is not being worked on atm or in the nearest future.
+I fixed the code, so it works better than before. Also I removed the XOR encryption on the memory operations, but will probably re-add it again soon.
