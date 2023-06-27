@@ -1,18 +1,20 @@
 #include <iostream>
-#include <thread>
+#include <chrono>
 #include "memory.h"
 #include "offsets.h"
 
 void bunnyhop(Memory& mem, std::uintptr_t clientDLL, std::uintptr_t localPlayer) {
+    if (!(GetAsyncKeyState(VK_SPACE) & 0x8000)) {
+        return;  // SPACE is not pressed
+    }
+
     int flags = mem.Read<int>(localPlayer + hazedumper::netvars::m_fFlags);
 
-    if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
-        if (flags & (1 << 0)) {
-            mem.Write<int>(clientDLL + hazedumper::signatures::dwForceJump, 6);
-        }
-        else {
-            mem.Write<int>(clientDLL + hazedumper::signatures::dwForceJump, 4);
-        }
+    if (flags & (1 << 0)) {
+        mem.Write<int>(clientDLL + hazedumper::signatures::dwForceJump, 4);
+    }
+    else {
+        mem.Write<int>(clientDLL + hazedumper::signatures::dwForceJump, 6);
     }
 }
 
@@ -39,13 +41,12 @@ int main()
     }
     std::cout << "[$] Base address of engine.dll: 0x" << std::hex << engineDLL << std::endl;
 
-
     while (true) {
-        std::uintptr_t localPlayer = mem.Read<std::uintptr_t>(clientDLL + hazedumper::signatures::dwLocalPlayer);
+        std::uintptr_t localPlayer = mem.Read<std::uintptr_t>(clientDLL + static_cast<std::uintptr_t>(hazedumper::signatures::dwLocalPlayer));
 
         bunnyhop(mem, clientDLL, localPlayer);
 
-        Sleep(25);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
     return 0;
