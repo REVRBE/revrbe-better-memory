@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MEMORY_H
+#define MEMORY_H
+
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <stdexcept>
@@ -7,46 +9,11 @@
 #include <memory>
 #include <concepts>
 #include <vector>
-#include <random>
-
-class XorCipher {
-public:
-    static std::vector<uint8_t> Encrypt(const std::vector<uint8_t>& data, const std::string& key) {
-        std::vector<uint8_t> encryptedData(data.size());
-
-        for (size_t i = 0; i < data.size(); ++i) {
-            encryptedData[i] = data[i] ^ key[i % key.size()];
-        }
-
-        return encryptedData;
-    }
-
-    static std::vector<uint8_t> Decrypt(const std::vector<uint8_t>& encryptedData, const std::string& key) {
-        return Encrypt(encryptedData, key); 
-    }
-};
+#include <iostream>
 
 class MemInterface
 {
 public:
-    MemInterface() {
-        if (XOR_key.empty()) { 
-            XOR_key = GenerateKey(16);
-        }
-    }
-
-    std::string GenerateKey(int length) {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(33, 126); 
-
-        std::string key;
-        for (int n = 0; n < length; ++n)
-            key.push_back(static_cast<char>(dis(gen)));
-
-        return key;
-    }
-
     virtual ~MemInterface() = default;
     virtual std::uintptr_t GetModuleAddress(const std::string_view moduleName) const noexcept = 0;
     virtual bool IsValid() const noexcept = 0;
@@ -55,12 +22,17 @@ public:
         requires std::is_trivially_copyable_v<T>
     constexpr const T Read(const std::uintptr_t& address) const noexcept
     {
-        T value = {};
-        std::vector<uint8_t> rawData(sizeof(T));
-        ReadProcessMemory(GetProcessHandle(), reinterpret_cast<const void*>(address), rawData.data(), rawData.size(), nullptr);
-        auto decryptedData = XorCipher::Decrypt(rawData, XOR_key);
+        T value{};
+        if constexpr (std::is_pointer_v<T>)
+        {
+            ReadProcessMemory(GetProcessHandle(), reinterpret_cast<const void*>(address), &value, sizeof(std::remove_pointer_t<T>), nullptr);
+        }
+        else
+        {
+            ReadProcessMemory(GetProcessHandle(), reinterpret_cast<const void*>(address), &value, sizeof(T), nullptr);
+        }
 
-        std::memcpy(&value, decryptedData.data(), sizeof(T));
+        //std::cout << "[+] Read operation succeeded at address 0x" << std::hex << address << std::endl;
         return value;
     }
 
@@ -68,20 +40,31 @@ public:
         requires std::is_trivially_copyable_v<T>
     constexpr void Write(const std::uintptr_t& address, const T& value) const noexcept
     {
-        std::vector<uint8_t> rawData(sizeof(T));
-        std::memcpy(rawData.data(), &value, sizeof(T));
-        auto encryptedData = XorCipher::Encrypt(rawData, XOR_key);
+        DWORD oldProtect;
+        if (VirtualProtectEx(GetProcessHandle(), reinterpret_cast<void*>(address), sizeof(T), PAGE_EXECUTE_READWRITE, &oldProtect))
+        {
+            if constexpr (std::is_pointer_v<T>)
+            {
+                WriteProcessMemory(GetProcessHandle(), reinterpret_cast<void*>(address), &value, sizeof(std::remove_pointer_t<T>), nullptr);
+            }
+            else
+            {
+                WriteProcessMemory(GetProcessHandle(), reinterpret_cast<void*>(address), &value, sizeof(T), nullptr);
+            }
 
-        WriteProcessMemory(GetProcessHandle(), reinterpret_cast<void*>(address), encryptedData.data(), encryptedData.size(), nullptr);
+            VirtualProtectEx(GetProcessHandle(), reinterpret_cast<void*>(address), sizeof(T), oldProtect, nullptr);
+
+            //std::cout << "[+] Write operation succeeded at address 0x" << std::hex << address << std::endl;
+        }
+        else
+        {
+            //std::cerr << "[-] Failed to change memory protection at address 0x" << std::hex << address << std::endl;
+        }
     }
 
 protected:
-    static std::string XOR_key;
-
     virtual void* GetProcessHandle() const noexcept = 0;
 };
-
-std::string MemInterface::XOR_key = ""; // Dont change this
 
 class Memory : public MemInterface
 {
@@ -132,10 +115,19 @@ public:
                 processId = entry.th32ProcessID;
 
                 pNtOpenProcess NtOpenProcess = (pNtOpenProcess)GetProcAddress(GetModuleHandle("ntdll.dll"), "NtOpenProcess");
-                if (NtOpenProcess) {
+                if (NtOpenProcess)
+                {
                     OBJECT_ATTRIBUTES oa = { sizeof(OBJECT_ATTRIBUTES) };
                     CLIENT_ID ci = { (HANDLE)processId, 0 };
-                    NtOpenProcess(&processHandle, PROCESS_ALL_ACCESS, &oa, &ci);
+                    NTSTATUS ntStatus = NtOpenProcess(&processHandle, PROCESS_ALL_ACCESS, &oa, &ci);
+                    if (ntStatus >= 0)
+                    {
+                        std::cout << "[+] NtOpenProcess succeeded" << std::endl;
+                    }
+                    else
+                    {
+                        std::cerr << "[-] NtOpenProcess failed with status: " << std::hex << ntStatus << std::endl;
+                    }
                 }
 
                 break;
@@ -204,3 +196,5 @@ protected:
         return processHandle;
     }
 };
+
+#endif
