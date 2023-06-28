@@ -35,6 +35,5 @@ Was too bored to implement any actual cheat features, but tested with simple bun
 Discord: revrbe
 
 <h4>Update</h4>
-I fixed the code, so it works better than before. Also I removed the XOR encryption on the memory operations, but will probably re-add it again soon with a more reliable implementation.
-  
+I fixed the code, so it works better than before. Also I removed the XOR encryption on the memory operations, but will probably re-add it again soon with a more reliable implementation.  
 I also added NtReadVirtualMemory and NtWriteVirtualMemory instead of Windows API counterparts and also made necessary functions and libraries dynamically loaded using JIT techniques.
