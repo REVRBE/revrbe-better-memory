@@ -2,7 +2,7 @@
 
 Functional memory header for opening handle, getting modules and read/writing to process. 
 
-Currently it is using NtOpenProcess to open a handle to the process/game.
+Currently its using NtOpenProcess to open a handle to the process and then NtReadVirtualMemory and NtWriteVirtualMemory to perform memory operations.
 
 <h2>Features and to-do</h2>
 
@@ -12,11 +12,13 @@ Currently it is using NtOpenProcess to open a handle to the process/game.
 
 ✅ Memory operations (read/write) 
 
-✅ Direct system call to NtOpenProcess instead of using Windows API's OpenProcess
+✅ NtOpenProcess, NtReadVirtualMemory & NtWriteVirtualMemory syscalls
 
 ✅ Polymorphism
 
-❌ Changing the rest of the Windows API functions to Native API functions(ReadProcessMemory, WriteProcessMemory, CreateToolhelp32Snapshot, Process32Next, Module32Next, ProcessIdToSessionId, GetModuleHandle & GetProcAddress)
+✅ Dynamically loading functions and libraries (JIT)
+
+❌ Changing the rest of the Windows API functions to Native API functions(CreateToolhelp32Snapshot, Process32Next, Module32Next, ProcessIdToSessionId, GetModuleHandle & GetProcAddress)
 
 <h2>Usage</h2>
 
@@ -30,7 +32,9 @@ Only tested on Windows 10 21H2
 
 Was too bored to implement any actual cheat features, but tested with simple bunny-hop and it works fine. For extra security; I recommend using Themida, VMProtect or Enigma.
 
-Contact: REVRBE#7036
+Discord: revrbe
 
 <h4>Update</h4>
 I fixed the code, so it works better than before. Also I removed the XOR encryption on the memory operations, but will probably re-add it again soon with a more reliable implementation.
+
+I also added NtReadVirtualMemory and NtWriteVirtualMemory instead of Windows API counterparts and also made necessary functions and libraries dynamically loaded using JIT techniques.
