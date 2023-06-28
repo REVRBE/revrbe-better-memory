@@ -16,7 +16,7 @@ Currently its using NtOpenProcess to open a handle to the process and then NtRea
 
 ✅ Polymorphism
 
-✅ Dynamically loading Native API functions and ntdll.dll library (JIT)
+✅ Dynamically loading Native API functions and ntdll.dll (JIT)
 
 ❌ Changing the rest of the Windows API functions to Native API functions(CreateToolhelp32Snapshot, Process32Next, Module32Next, ProcessIdToSessionId, GetModuleHandle & GetProcAddress)
 
